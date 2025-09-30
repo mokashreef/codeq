@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQ - منصة الأسئلة البرمجية</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+    <link rel="stylesheet" href="client/style.css">
+</head>
+
+<body>
+    <!-- شريط التنقل -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <i class="fas fa-code"></i>
+                <span>CodeQ</span>
+            </div>
+            <div class="nav-controls">
+                <button id="themeToggle" class="btn-icon">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button id="loginBtn" class="btn-secondary">
+                    <i class="fas fa-user"></i> تسجيل الدخول
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- المحتوى الرئيسي -->
+    <main class="main-container">
+        <!-- قسم البحث -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <h1>اطرح سؤالك البرمجي</h1>
+                <p class="hero-subtitle">احصل على إجابات فورية باستخدام الذكاء الاصطناعي</p>
+
+                <div class="search-container">
+                    <div class="search-box">
+                        <textarea id="questionInput" placeholder="اكتب سؤالك البرمجي هنا... مثال: كيف أنشئ دالة في JavaScript؟" rows="4"></textarea>
+                        <div class="search-actions">
+                            <select id="languageSelect">
+                                <option value="">اختر لغة البرمجة</option>
+                                <option value="javascript">JavaScript</option>
+                                <option value="python">Python</option>
+                                <option value="java">Java</option>
+                                <option value="cpp">C++</option>
+                                <option value="php">PHP</option>
+                                <option value="html">HTML/CSS</option>
+                            </select>
+                            <button id="askBtn" class="btn-primary">
+                                <i class="fas fa-paper-plane"></i> اطرح السؤال
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- قسم الإجابة -->
+        <section class="answer-section" id="answerSection" style="display: none;">
+            <div class="answer-container">
+                <div class="answer-header">
+                    <h2>الإجابة</h2>
+                    <div class="answer-actions">
+                        <button id="copyAnswer" class="btn-secondary">
+                            <i class="fas fa-copy"></i> نسخ
+                        </button>
+                        <button id="saveQuestion" class="btn-secondary">
+                            <i class="fas fa-bookmark"></i> حفظ
+                        </button>
+                    </div>
+                </div>
+                <div class="answer-content">
+                    <div id="answerContent" class="answer-text">
+                        <!-- الإجابة ستظهر هنا -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- الأسئلة الشائعة -->
+        <section class="popular-questions">
+            <h2>أسئلة شائعة</h2>
+            <div class="questions-grid">
+                <div class="question-card" data-question="كيف أنشئ دالة في JavaScript؟">
+                    <div class="question-icon">
+                        <i class="fab fa-js"></i>
+                    </div>
+                    <div class="question-content">
+                        <h3>كيف أنشئ دالة في JavaScript؟</h3>
+                        <p>تعلم أساسيات إنشاء الدوال في JavaScript</p>
+                    </div>
+                </div>
+                <div class="question-card" data-question="ما الفرق بين let و var في JavaScript؟">
+                    <div class="question-icon">
+                        <i class="fab fa-js"></i>
+                    </div>
+                    <div class="question-content">
+                        <h3>ما الفرق بين let و var؟</h3>
+                        <p>فهم scope والمتغيرات في JavaScript</p>
+                    </div>
+                </div>
+                <div class="question-card" data-question="كيف أتعامل مع الـ APIs في Python؟">
+                    <div class="question-icon">
+                        <i class="fab fa-python"></i>
+                    </div>
+                    <div class="question-content">
+                        <h3>كيف أتعامل مع الـ APIs في Python؟</h3>
+                        <p>استخدام requests library للاتصال بالـ APIs</p>
+                    </div>
+                </div>
+                <div class="question-card" data-question="ما هي الـ promises في JavaScript؟">
+                    <div class="question-icon">
+                        <i class="fab fa-js"></i>
+                    </div>
+                    <div class="question-content">
+                        <h3>ما هي الـ promises في JavaScript؟</h3>
+                        <p>فهم البرمجة غير المتزامنة في JavaScript</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- نافذة تسجيل الدخول -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>تسجيل الدخول</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form class="modal-form">
+                <div class="form-group">
+                    <label for="email">البريد الإلكتروني</label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">كلمة المرور</label>
+                    <input type="password" id="password" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">تسجيل الدخول</button>
+                    <button type="button" class="btn-secondary cancel-btn">إلغاء</button>
+                </div>
+                <div class="form-footer">
+                    <p>ليس لديك حساب؟ <a href="#" id="showRegister">سجل الآن</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- نافذة التسجيل -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>إنشاء حساب جديد</h2>
+                <button class="close-btn">&times;</button>
+            </div>
+            <form class="modal-form">
+                <div class="form-group">
+                    <label for="regName">الاسم الكامل</label>
+                    <input type="text" id="regName" required>
+                </div>
+                <div class="form-group">
+                    <label for="regEmail">البريد الإلكتروني</label>
+                    <input type="email" id="regEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">كلمة المرور</label>
+                    <input type="password" id="regPassword" required>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="btn-primary">إنشاء حساب</button>
+                    <button type="button" class="btn-secondary cancel-btn">إلغاء</button>
+                </div>
+                <div class="form-footer">
+                    <p>لديك حساب بالفعل؟ <a href="#" id="showLogin">سجل الدخول</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- التذييل -->
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2024 CodeQ. جميع الحقوق محفوظة.</p>
+            <div class="footer-links">
+                <a href="#">الشروط والأحكام</a>
+                <a href="#">الخصوصية</a>
+                <a href="#">اتصل بنا</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+    <script src="client/script.js"></script>
+</body>
+
+</html>
