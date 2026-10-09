@@ -22,6 +22,7 @@ class CodeQApplication {
     this.isGenerating = false;
     this.activeCategory = 'all';
     this.activeSidebarTab = 'history';
+    this.userIsAtBottom = true;
   }
 
   async init() {
@@ -48,8 +49,9 @@ class CodeQApplication {
     this.hwCheckBtn = document.getElementById('hwCheckBtn');
     this.ecosystemBtn = document.getElementById('ecosystemBtn');
 
-    // Sidebar
+    // Sidebar & Backdrop
     this.sidebar = document.getElementById('appSidebar');
+    this.sidebarBackdrop = document.getElementById('sidebarBackdrop');
     this.sidebarSearchInput = document.getElementById('sidebarSearch');
     this.tabHistoryBtn = document.getElementById('tabHistory');
     this.tabBookmarksBtn = document.getElementById('tabBookmarks');
@@ -88,9 +90,19 @@ class CodeQApplication {
       showToast(`تم التبديل إلى الوضع ${newTheme === 'dark' ? 'الداكن' : 'الفاتح'}`, 'info', 2000);
     });
 
-    // Mobile sidebar toggle
+    // Messages container scroll detection for sticky-bottom behavior
+    this.messagesStream?.addEventListener('scroll', () => {
+      this.userIsAtBottom = this.isUserNearBottom(90);
+    }, { passive: true });
+
+    // Mobile sidebar toggle with backdrop
     this.sidebarToggleBtn?.addEventListener('click', () => {
-      this.sidebar.classList.toggle('open');
+      const isOpen = this.sidebar.classList.toggle('open');
+      this.sidebarBackdrop?.classList.toggle('active', isOpen);
+    });
+
+    this.sidebarBackdrop?.addEventListener('click', () => {
+      this.closeMobileSidebar();
     });
 
     // New conversation
@@ -99,9 +111,7 @@ class CodeQApplication {
       this.renderCurrentSession();
       this.questionInput.value = '';
       this.questionInput.focus();
-      if (window.innerWidth <= 850) {
-        this.sidebar.classList.remove('open');
-      }
+      this.closeMobileSidebar();
     });
 
     // Modals open triggers
@@ -383,7 +393,7 @@ class CodeQApplication {
         item.addEventListener('click', () => {
           this.store.switchSession(turn.sessionId);
           this.renderCurrentSession();
-          if (window.innerWidth <= 850) this.sidebar.classList.remove('open');
+          this.closeMobileSidebar();
         });
         this.sessionListContainer.appendChild(item);
       });
@@ -431,15 +441,22 @@ class CodeQApplication {
         }
         this.store.switchSession(session.id);
         this.renderCurrentSession();
-        if (window.innerWidth <= 850) this.sidebar.classList.remove('open');
+        this.closeMobileSidebar();
       });
 
       this.sessionListContainer.appendChild(item);
     });
   }
 
+  closeMobileSidebar() {
+    if (this.sidebar?.classList.contains('open')) {
+      this.sidebar.classList.remove('open');
+      this.sidebarBackdrop?.classList.remove('active');
+    }
+  }
+
   // --- Chat Stream Renderers ---
-  renderCurrentSession() {
+  renderCurrentSession(keepScroll = false) {
     const session = this.store.getCurrentSession();
     if (!session || session.turns.length === 0) {
       this.emptyState.style.display = 'flex';
@@ -448,6 +465,7 @@ class CodeQApplication {
       return;
     }
 
+    const prevScrollTop = this.messagesStream.scrollTop;
     this.emptyState.style.display = 'none';
     this.messagesStream.innerHTML = '';
 
@@ -457,7 +475,11 @@ class CodeQApplication {
     });
 
     attachCodeBlockListeners(this.messagesStream);
-    this.scrollToBottom();
+    if (keepScroll && !this.userIsAtBottom) {
+      this.messagesStream.scrollTop = prevScrollTop;
+    } else {
+      this.scrollToBottom(true);
+    }
   }
 
   createTurnElement(turn) {
@@ -627,14 +649,17 @@ class CodeQApplication {
       </div>
     `;
 
+    this.closeMobileSidebar();
+    this.userIsAtBottom = true;
     this.messagesStream.appendChild(turnEl);
-    this.scrollToBottom();
+    this.scrollToBottom(true);
 
     this.questionInput.value = '';
     this.questionInput.style.height = 'auto';
 
     let streamedText = '';
     const startTime = performance.now();
+    let rafPending = false;
 
     try {
       const onProgress = (report) => {
@@ -648,9 +673,17 @@ class CodeQApplication {
 
       const onChunk = (chunk) => {
         streamedText += chunk;
-        markdownContentEl.innerHTML = renderMarkdown(streamedText);
-        attachCodeBlockListeners(markdownContentEl);
-        this.scrollToBottom();
+        if (!rafPending) {
+          rafPending = true;
+          requestAnimationFrame(() => {
+            markdownContentEl.innerHTML = renderMarkdown(streamedText);
+            attachCodeBlockListeners(markdownContentEl);
+            if (this.userIsAtBottom) {
+              this.messagesStream.scrollTop = this.messagesStream.scrollHeight;
+            }
+            rafPending = false;
+          });
+        }
       };
 
       const result = await this.ai.ask({
@@ -664,7 +697,10 @@ class CodeQApplication {
       this.modelLoadingBanner.style.display = 'none';
       const durationMs = Math.round(performance.now() - startTime);
 
-      await this.store.addTurnToCurrentSession({
+      markdownContentEl.innerHTML = renderMarkdown(result.text || streamedText);
+      attachCodeBlockListeners(markdownContentEl);
+
+      const savedTurn = await this.store.addTurnToCurrentSession({
         question,
         answer: result.text || streamedText,
         language,
@@ -673,7 +709,45 @@ class CodeQApplication {
         durationMs,
       });
 
-      this.renderCurrentSession();
+      if (savedTurn?.id) {
+        turnEl.id = savedTurn.id;
+      }
+
+      const sourceInfo = turnEl.querySelector('.answer-source-info');
+      if (sourceInfo && !sourceInfo.querySelector('span:not(.source-tag)')) {
+        const s = document.createElement('span');
+        s.textContent = `${(durationMs / 1000).toFixed(1)} ثانية`;
+        sourceInfo.appendChild(s);
+      }
+
+      const favBtn = turnEl.querySelector('.btn-fav');
+      favBtn?.addEventListener('click', async () => {
+        const tId = savedTurn?.id || turnEl.id;
+        const isFav = await this.store.toggleFavorite(tId);
+        favBtn.classList.toggle('bookmarked', isFav);
+        favBtn.innerHTML = `
+          <i class="${isFav ? 'fas fa-bookmark' : 'far fa-bookmark'}"></i>
+          <span>${isFav ? 'محفوظ' : 'حفظ'}</span>
+        `;
+        showToast(isFav ? 'تم الحفظ في المفضلة.' : 'تمت الإزالة من المفضلة.', 'info', 1600);
+      });
+
+      const copyAllBtn = turnEl.querySelector('.btn-copy-all');
+      copyAllBtn?.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(result.text || streamedText);
+          copyAllBtn.innerHTML = '<i class="fas fa-check" style="color: var(--success);"></i> <span>تم النسخ</span>';
+          setTimeout(() => {
+            copyAllBtn.innerHTML = '<i class="fas fa-copy"></i> <span>نسخ</span>';
+          }, 2000);
+        } catch (err) {
+          showToast('تعذر النسخ إلى الحافظة.', 'error');
+        }
+      });
+
+      if (this.userIsAtBottom) {
+        this.scrollToBottom(true);
+      }
       showToast('تمت الإجابة وتوليد الكود بنجاح.', 'success', 2000);
     } catch (error) {
       console.error('Question execution failed:', error);
@@ -697,8 +771,17 @@ class CodeQApplication {
     }
   }
 
-  scrollToBottom() {
-    this.messagesStream.scrollTop = this.messagesStream.scrollHeight;
+  isUserNearBottom(threshold = 90) {
+    if (!this.messagesStream) return true;
+    const { scrollTop, scrollHeight, clientHeight } = this.messagesStream;
+    return (scrollHeight - scrollTop - clientHeight) <= threshold;
+  }
+
+  scrollToBottom(force = false) {
+    if (!this.messagesStream) return;
+    if (force || this.isUserNearBottom(90)) {
+      this.messagesStream.scrollTop = this.messagesStream.scrollHeight;
+    }
   }
 
   listenNetworkStatus() {

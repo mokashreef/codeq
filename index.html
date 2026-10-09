@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content">
   <title>CodeQ — منصة الأسئلة البرمجية | منظومة كود التطور</title>
   <meta name="description" content="منصة عربية احترافية للأسئلة البرمجية وحلول الأكواد بالذكاء الاصطناعي دون الحاجة لمفاتيح API. جزء من منظومة كود التطور، تطوير المهندس محمد أبو خشريف.">
   <meta name="author" content="المهندس محمد أبو خشريف">
@@ -50,18 +50,18 @@
         <!-- زر منظومة كود التطور -->
         <button id="ecosystemBtn" class="btn-nav" title="مشاريع منظومة كود التطور">
           <i class="fas fa-network-wired"></i>
-          <span>منظومة كود التطور</span>
+          <span class="btn-label">منظومة كود التطور</span>
         </button>
 
         <!-- زر فحص العتاد -->
-        <button id="hwCheckBtn" class="btn-icon-square" title="فحص دعم كرت الشاشة و WebGPU">
+        <button id="hwCheckBtn" class="btn-icon-square btn-hw" title="فحص دعم كرت الشاشة و WebGPU">
           <i class="fas fa-microchip"></i>
         </button>
 
         <!-- زر محادثة جديدة -->
-        <button id="newChatBtn" class="btn-primary-action" title="بدء محادثة جديدة">
+        <button id="newChatBtn" class="btn-primary-action btn-new-chat" title="بدء محادثة جديدة">
           <i class="fas fa-plus"></i>
-          <span>محادثة جديدة</span>
+          <span class="btn-label">محادثة جديدة</span>
         </button>
 
         <!-- تبديل السمة -->
@@ -70,12 +70,15 @@
         </button>
 
         <!-- حول المنصة -->
-        <button id="aboutBtn" class="btn-icon-square" title="حول المنصة والمطور">
+        <button id="aboutBtn" class="btn-icon-square btn-about" title="حول المنصة والمطور">
           <i class="fas fa-info"></i>
         </button>
       </div>
     </div>
   </header>
+
+  <!-- خلفية معتمة للشريط الجانبي على الهواتف -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
   <!-- جسم التطبيق -->
   <div class="app-body">
