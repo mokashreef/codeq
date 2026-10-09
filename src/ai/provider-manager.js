@@ -1,27 +1,27 @@
 /**
  * Unified AI Provider Manager for CodeQ
- * Seamlessly manages In-Browser WebLLM, Zero-Key Puter Cloud, and optional Custom BYOK.
+ * Real Zero-Key Cloud AI (Pollinations), In-Browser WebLLM, and Optional Custom BYOK.
  */
 
 import {
   PROVIDER_TYPES,
+  CLOUD_MODELS,
   WEBGPU_MODELS,
-  PUTER_MODELS,
 } from './types.js';
+import { PollinationsProvider } from './pollinations-provider.js';
 import { WebLLMProvider } from './webllm-provider.js';
-import { PuterProvider } from './puter-provider.js';
 import { CustomProvider } from './custom-provider.js';
 import { detectWebGPU } from './webgpu-detect.js';
 
 export class AIProviderManager {
   constructor() {
+    this.cloud = new PollinationsProvider();
     this.webllm = new WebLLMProvider();
-    this.puter = new PuterProvider();
     this.custom = new CustomProvider();
 
-    // Default provider and models
-    this.providerType = PROVIDER_TYPES.PUTER; // Defaults to instant zero-key cloud for immediate experience
-    this.selectedModel = 'gpt-4o-mini';
+    // Default to verified zero-key cloud AI
+    this.providerType = PROVIDER_TYPES.CLOUD;
+    this.selectedModel = 'openai-fast';
     this.webgpuStatus = null;
 
     this.loadPersistedPreferences();
@@ -38,7 +38,7 @@ export class AIProviderManager {
         this.selectedModel = savedModel;
       }
     } catch {
-      // Ignore storage errors
+      // Ignore localStorage errors
     }
   }
 
@@ -47,7 +47,7 @@ export class AIProviderManager {
       localStorage.setItem('codeq_active_provider', this.providerType);
       localStorage.setItem('codeq_active_model', this.selectedModel);
     } catch {
-      // Ignore storage errors
+      // Ignore localStorage errors
     }
   }
 
@@ -60,7 +60,7 @@ export class AIProviderManager {
 
   setProvider(providerType, modelId = null) {
     if (!Object.values(PROVIDER_TYPES).includes(providerType)) {
-      throw new Error(`نوع المزود غير صالح: ${providerType}`);
+      throw new Error(`نوع المزوّد غير صالح: ${providerType}`);
     }
 
     this.providerType = providerType;
@@ -68,11 +68,10 @@ export class AIProviderManager {
     if (modelId) {
       this.selectedModel = modelId;
     } else {
-      // Pick sensible default for provider
-      if (providerType === PROVIDER_TYPES.WEBGPU) {
+      if (providerType === PROVIDER_TYPES.CLOUD) {
+        this.selectedModel = CLOUD_MODELS[0].id;
+      } else if (providerType === PROVIDER_TYPES.WEBGPU) {
         this.selectedModel = this.webgpuStatus?.recommendedModel || WEBGPU_MODELS[0].id;
-      } else if (providerType === PROVIDER_TYPES.PUTER) {
-        this.selectedModel = PUTER_MODELS[1].id; // gpt-4o-mini
       } else if (providerType === PROVIDER_TYPES.CUSTOM) {
         this.selectedModel = this.custom.getConfig().model || 'gpt-4o-mini';
       }
@@ -89,37 +88,21 @@ export class AIProviderManager {
     return {
       providerType: this.providerType,
       selectedModel: this.selectedModel,
+      isCloud: this.providerType === PROVIDER_TYPES.CLOUD,
       isWebGPU: this.providerType === PROVIDER_TYPES.WEBGPU,
-      isPuter: this.providerType === PROVIDER_TYPES.PUTER,
       isCustom: this.providerType === PROVIDER_TYPES.CUSTOM,
+      providerLabel: this.getProviderLabel(),
     };
   }
 
-  /**
-   * Initializes the active model if needed (especially for WebLLM download/cache).
-   */
-  async ensureReady(onProgress = () => {}) {
+  getProviderLabel() {
+    if (this.providerType === PROVIDER_TYPES.CLOUD) {
+      return 'سحابي مجاني (بدون مفتاح)';
+    }
     if (this.providerType === PROVIDER_TYPES.WEBGPU) {
-      const gpu = await this.checkHardwareCapabilities();
-      if (!gpu.isSupported) {
-        throw new Error(gpu.reason || 'المتصفح لا يدعم WebGPU لتشغيل النموذج محلياً.');
-      }
-      return await this.webllm.initModel(this.selectedModel, onProgress);
+      return 'محلي في المتصفح (WebGPU)';
     }
-
-    if (this.providerType === PROVIDER_TYPES.PUTER) {
-      onProgress({ text: 'جاري التحقق من خدمة الذكاء الاصطناعي السحابية المجانية...', progress: 0.5 });
-      const puter = await this.puter.ensurePuter();
-      onProgress({ text: 'الخدمة جاهزة للاستخدام الفوري.', progress: 1.0 });
-      return puter;
-    }
-
-    if (this.providerType === PROVIDER_TYPES.CUSTOM) {
-      if (!this.custom.hasKey()) {
-        throw new Error('لم تقم بتعيين مفتاح API خاص بك في إعدادات BYOK.');
-      }
-      return true;
-    }
+    return 'مفتاح خاص (BYOK)';
   }
 
   /**
@@ -151,41 +134,43 @@ export class AIProviderManager {
     }
     messages.push({ role: 'user', content: userPrompt });
 
-    // Step 1: Ensure provider is initialized
-    await this.ensureReady(onProgress);
-
-    // Step 2: Stream response based on active provider
-    try {
-      if (this.providerType === PROVIDER_TYPES.WEBGPU) {
-        return await this.webllm.generateStream(messages, onChunk);
+    // Handle Local In-Browser WebGPU execution
+    if (this.providerType === PROVIDER_TYPES.WEBGPU) {
+      const gpu = await this.checkHardwareCapabilities();
+      if (!gpu.isSupported) {
+        throw new Error(`البيئة الحالية لا تدعم تشغيل النماذج محلياً عبر WebGPU:\n${gpu.reason}\n\nيرجى التبديل إلى "المزوّد السحابي المجاني" للبدء فوراً.`);
       }
 
-      if (this.providerType === PROVIDER_TYPES.PUTER) {
-        return await this.puter.generateStream(messages, onChunk, {
-          model: this.selectedModel,
-        });
-      }
+      onProgress({ text: `جاري تهيئة النموذج المحلي (${this.selectedModel})...`, progress: 0.1 });
+      await this.webllm.initModel(this.selectedModel, onProgress);
 
-      if (this.providerType === PROVIDER_TYPES.CUSTOM) {
-        return await this.custom.generateStream(messages, onChunk, {
-          model: this.selectedModel,
-        });
-      }
-    } catch (primaryError) {
-      console.warn(`Primary provider (${this.providerType}) failed:`, primaryError);
-
-      // Auto-fallback: If WebLLM fails (e.g. out of memory on device), offer or fallback to Puter
-      if (this.providerType === PROVIDER_TYPES.WEBGPU) {
-        onProgress({
-          text: 'تعذر تشغيل النموذج المحلي على هذا الجهاز. جاري التحويل التلقائي للمزود السحابي المجاني...',
-          progress: 0.8,
-        });
-        return await this.puter.generateStream(messages, onChunk, {
-          model: 'gpt-4o-mini',
-        });
-      }
-
-      throw primaryError;
+      const result = await this.webllm.generateStream(messages, onChunk);
+      return {
+        ...result,
+        providerName: 'محلي (WebGPU WebLLM)',
+      };
     }
+
+    // Handle Custom BYOK execution
+    if (this.providerType === PROVIDER_TYPES.CUSTOM) {
+      if (!this.custom.hasKey()) {
+        throw new Error('لم يتم إدخال مفتاح API في إعدادات المزوّد المخصص (BYOK).');
+      }
+      onProgress({ text: 'جاري الاتصال بنقطة النهاية المخصصة...', progress: 0.5 });
+      const result = await this.custom.generateStream(messages, onChunk, {
+        model: this.selectedModel,
+      });
+      return {
+        ...result,
+        providerName: 'مزوّد مخصص (BYOK)',
+      };
+    }
+
+    // Default: Cloud Free AI (Pollinations)
+    onProgress({ text: 'جاري إرسال السؤال إلى المزوّد السحابي المجاني...', progress: 0.3 });
+    const result = await this.cloud.generateStream(messages, onChunk, {
+      model: this.selectedModel,
+    });
+    return result;
   }
 }

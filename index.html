@@ -4,22 +4,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CodeQ - منصة الأسئلة البرمجية بالذكاء الاصطناعي</title>
-  <meta name="description" content="منصة عربية احترافية لطرح الأسئلة البرمجية والحصول على حلول وشروحات ذكية وفورية مدعومة بنماذج ذكاء اصطناعي حقيقية بدون الحاجة لمفاتيح API.">
-  <meta name="keywords" content="برمجة, ذكاء اصطناعي, بايثون, جافاسكريبت, كود, أسئلة برمجية, خوارزميات, WebLLM, WebGPU, CodeQ">
-  <meta name="author" content="CodeQ Team">
-  <meta name="theme-color" content="#0a0d14">
+  <title>CodeQ — منصة الأسئلة البرمجية | منظومة كود التطور</title>
+  <meta name="description" content="منصة عربية احترافية للأسئلة البرمجية وحلول الأكواد بالذكاء الاصطناعي دون الحاجة لمفاتيح API. جزء من منظومة كود التطور، تطوير المهندس محمد أبو خشريف.">
+  <meta name="author" content="المهندس محمد أبو خشريف">
+  <meta name="theme-color" content="#09090b">
 
-  <!-- Open Graph / Social Sharing -->
+  <!-- Open Graph -->
   <meta property="og:type" content="website">
-  <meta property="og:title" content="CodeQ - منصة الأسئلة البرمجية بالذكاء الاصطناعي">
-  <meta property="og:description" content="اطرح استفساراتك البرمجية واحصل على شروحات وأكواد دقيقة مجاناً وبدون أي مفاتيح API.">
+  <meta property="og:title" content="CodeQ — منصة الأسئلة البرمجية">
+  <meta property="og:description" content="حلول وشروحات برمجية ذكية مدعومة بنماذج ذكاء اصطناعي حقيقية بدون مفاتيح API.">
   <meta property="og:image" content="favicon.svg">
 
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <!-- Font Awesome 6 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-  <!-- Highlight.js Theme -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
 </head>
 
@@ -28,139 +25,124 @@
   <header class="app-header">
     <div class="header-container">
       <div class="header-left">
-        <button id="sidebarToggleBtn" class="btn-icon" aria-label="تبديل القائمة الجانبية" title="المحادثات السابقة">
+        <button id="sidebarToggleBtn" class="btn-icon-square" aria-label="القائمة الجانبية" title="المحادثات السابقة">
           <i class="fas fa-bars"></i>
         </button>
-        <a href="#" class="brand-link" id="brandLink">
-          <img src="favicon.svg" alt="CodeQ Logo" class="brand-logo">
-          <div class="brand-text">
+        <div class="brand-wrap">
+          <div class="brand-icon-box">CQ</div>
+          <div class="brand-meta">
             <span class="brand-title">CodeQ</span>
-            <span class="brand-tagline">منصة الأسئلة البرمجية الذكية</span>
+            <span class="brand-affiliation">منظومة كود التطور</span>
           </div>
-        </a>
+        </div>
       </div>
 
       <div class="header-center">
-        <!-- زر تخصيص مزود الذكاء الاصطناعي -->
-        <button id="providerBadgeBtn" class="provider-badge-btn" title="تغيير نموذج أو مزود الذكاء الاصطناعي">
-          <span class="status-dot" id="providerStatusDot"></span>
-          <span class="provider-title" id="providerBadgeText">سحابي مجاني: GPT-4o mini</span>
-          <i class="fas fa-chevron-down" style="font-size: 0.7rem; color: var(--text-muted);"></i>
+        <!-- زر خيارات المزود والحالة الحقيقية -->
+        <button id="providerBadgeBtn" class="provider-pill" title="إعدادات مزوّد الذكاء الاصطناعي">
+          <span class="status-indicator" id="providerStatusDot"></span>
+          <span id="providerBadgeText">سحابي مجاني • OpenAI Fast</span>
+          <i class="fas fa-chevron-down" style="font-size: 0.65rem; color: var(--text-muted);"></i>
         </button>
       </div>
 
-      <div class="header-actions">
-        <!-- فحص عتاد WebGPU -->
-        <button id="hwCheckBtn" class="btn-icon" title="فحص توافق كرت الشاشة و WebGPU">
-          <span class="status-dot local" id="hwStatusDot" style="position: absolute; top: 8px; right: 8px; width: 6px; height: 6px;"></span>
+      <div class="header-right">
+        <!-- زر منظومة كود التطور -->
+        <button id="ecosystemBtn" class="btn-nav" title="مشاريع منظومة كود التطور">
+          <i class="fas fa-network-wired"></i>
+          <span>منظومة كود التطور</span>
+        </button>
+
+        <!-- زر فحص العتاد -->
+        <button id="hwCheckBtn" class="btn-icon-square" title="فحص دعم كرت الشاشة و WebGPU">
           <i class="fas fa-microchip"></i>
         </button>
 
-        <!-- زر المحادثة الجديدة -->
-        <button id="newChatBtn" class="btn-primary" title="بدء محادثة برمجية جديدة">
+        <!-- زر محادثة جديدة -->
+        <button id="newChatBtn" class="btn-primary-action" title="بدء محادثة جديدة">
           <i class="fas fa-plus"></i>
           <span>محادثة جديدة</span>
         </button>
 
-        <!-- تبديل السمة (داكن/فاتح) -->
-        <button id="themeToggle" class="btn-icon" title="تبديل السمة" aria-label="تبديل السمة">
+        <!-- تبديل السمة -->
+        <button id="themeToggle" class="btn-icon-square" title="تبديل السمة (فاتح/داكن)">
           <i class="fas fa-sun"></i>
         </button>
 
         <!-- حول المنصة -->
-        <button id="aboutBtn" class="btn-icon" title="عن المنصة والخصوصية" aria-label="حول المنصة">
-          <i class="fas fa-circle-question"></i>
+        <button id="aboutBtn" class="btn-icon-square" title="حول المنصة والمطور">
+          <i class="fas fa-info"></i>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- جسم التطبيق الرئيسي -->
+  <!-- جسم التطبيق -->
   <div class="app-body">
-    <!-- الشريط الجانبي للمحادثات والمفضلة -->
+    <!-- الشريط الجانبي -->
     <aside class="sidebar" id="appSidebar">
-      <div class="sidebar-header">
-        <div class="sidebar-search-box">
-          <i class="fas fa-search"></i>
-          <input type="text" id="sidebarSearch" class="sidebar-search-input" placeholder="ابحث في سجل المحادثات...">
-        </div>
+      <div class="sidebar-search-area">
+        <input type="text" id="sidebarSearch" class="search-field" placeholder="ابحث في سجل الأسئلة...">
       </div>
 
       <div class="sidebar-tabs">
-        <button type="button" id="tabHistory" class="tab-btn active">
-          <i class="fas fa-clock-rotate-left"></i>
-          <span>السجل</span>
-        </button>
-        <button type="button" id="tabBookmarks" class="tab-btn">
-          <i class="fas fa-bookmark"></i>
-          <span>المفضلة</span>
-        </button>
+        <button type="button" id="tabHistory" class="tab-nav-btn active">السجل</button>
+        <button type="button" id="tabBookmarks" class="tab-nav-btn">المفضلة</button>
       </div>
 
-      <div class="sidebar-content" id="sessionList">
-        <!-- يتم إدراج المحادثات برمجياً هنا -->
+      <div class="sidebar-list" id="sessionList">
+        <!-- عناصر المحادثات تظهر هنا -->
       </div>
 
       <div class="sidebar-footer">
-        <button type="button" id="exportDataBtn" class="btn-icon" style="width: 32px; height: 32px;" title="تصدير السجل بتنسيق JSON">
-          <i class="fas fa-file-arrow-down"></i>
+        <button type="button" id="exportDataBtn" class="btn-icon-square" style="width: 28px; height: 28px;" title="تصدير السجل JSON">
+          <i class="fas fa-download"></i>
         </button>
-        <span>البيانات محفوظة محلياً 100%</span>
-        <button type="button" id="clearAllBtn" class="btn-icon" style="width: 32px; height: 32px; color: var(--accent-rose);" title="مسح السجل">
+        <span>تطوير م. محمد أبو خشريف</span>
+        <button type="button" id="clearAllBtn" class="btn-icon-square" style="width: 28px; height: 28px; color: var(--error);" title="مسح السجل">
           <i class="fas fa-trash-can"></i>
         </button>
       </div>
     </aside>
 
-    <!-- منطقة الشات والإجابات الرئيسية -->
-    <main class="main-chat-container">
-      <!-- شريط مؤشر تحميل وتنزيل النموذج المحلي في المتصفح -->
-      <div class="model-loading-banner" id="modelLoadingBanner" style="display: none;">
-        <div class="model-banner-header">
-          <span id="modelBannerText"><i class="fas fa-download fa-spin"></i> جاري تنزيل أوزان النموذج المحلي إلى ذاكرة المتصفح...</span>
-          <span style="font-size: 0.75rem; color: #a5b4fc;">(يتم التحميل لمرة واحدة فقط ويحفظ في المتصفح)</span>
-        </div>
-        <div class="progress-track">
-          <div class="progress-bar" id="modelProgressBar"></div>
+    <!-- مساحة المحادثة والأسئلة -->
+    <main class="chat-workspace">
+      <!-- شريط التحميل والتهيئة الحقيقية -->
+      <div class="status-banner" id="modelLoadingBanner" style="display: none;">
+        <span id="modelBannerText">جاري تهيئة النموذج...</span>
+        <div class="status-banner-bar">
+          <div class="status-banner-fill" id="modelProgressBar"></div>
         </div>
       </div>
 
       <!-- تدفق الرسائل -->
-      <section class="messages-stream" id="messagesStream">
-        <!-- شاشة البداية عند فتح محادثة فارغة -->
-        <div class="empty-state" id="emptyState">
-          <div class="empty-icon-wrap">
-            <i class="fas fa-code"></i>
-          </div>
-          <h1 class="empty-title">مرحباً بك في CodeQ</h1>
-          <p class="empty-subtitle">
-            منصتك العربية الذكية لحل المسائل البرمجية، شرح المفاهيم، وتحليل الأكواد مع إمكانية التشغيل محلياً في متصفحك أو عبر نماذج سحابية مجانية 100%.
+      <section class="messages-container" id="messagesStream">
+        <!-- شاشة البداية عند فتح جلسة جديدة -->
+        <div class="empty-view" id="emptyState">
+          <h1 class="empty-view-title">منصة CodeQ للأسئلة البرمجية</h1>
+          <p class="empty-view-subtitle">
+            اطرح سؤالك البرمجي، تصحيح الأخطاء، أو شرح المفاهيم. تعمل المنصة بنماذج ذكاء اصطناعي حقيقية دون الحاجة لأي مفتاح API.
           </p>
 
-          <div class="curated-categories" id="curatedCats">
-            <!-- تصنيفات الأسئلة -->
-          </div>
-
-          <div class="curated-grid" id="curatedGrid">
-            <!-- كروت الأسئلة الشائعة -->
-          </div>
+          <div class="curated-categories-nav" id="curatedCats"></div>
+          <div class="curated-items-grid" id="curatedGrid"></div>
         </div>
       </section>
 
-      <!-- حقل إدخال السؤال والتحكم -->
-      <footer class="input-section">
-        <div class="input-container-card">
+      <!-- حقل إدخال السؤال -->
+      <footer class="input-dock">
+        <div class="input-box-wrapper">
           <textarea
             id="questionInput"
-            class="question-textarea"
-            placeholder="اكتب سؤالك البرمجي هنا أو الصق الكود الذي تريد تصحيحه أو شرحه... (مثال: كيف أتعامل مع Async/Await في JavaScript؟)"
+            class="prompt-textarea"
+            placeholder="اكتب سؤالك البرمجي هنا أو الصق الكود المطلوب تحليله... (مثال: كيف أتعامل مع Async/Await في JavaScript؟)"
             rows="2"
           ></textarea>
 
-          <div class="input-footer">
-            <div class="input-meta-controls">
-              <select id="languageSelect" class="lang-select" title="اختر لغة البرمجة (اختياري)">
-                <option value="">لغة البرمجة (عام)</option>
+          <div class="input-controls-row">
+            <div class="input-options-left">
+              <select id="languageSelect" class="select-control" title="لغة البرمجة (اختياري)">
+                <option value="">اللغة (تلقائي)</option>
                 <option value="javascript">JavaScript</option>
                 <option value="typescript">TypeScript</option>
                 <option value="python">Python</option>
@@ -172,14 +154,14 @@
                 <option value="rust">Rust</option>
                 <option value="sql">SQL</option>
                 <option value="html">HTML/CSS</option>
-                <option value="shell">Bash/Shell</option>
+                <option value="shell">Shell/Bash</option>
               </select>
-              <span class="shortcut-hint">إرسال: <kbd>Ctrl</kbd> + <kbd>Enter</kbd></span>
+              <span class="keyboard-hint"><kbd>Ctrl</kbd> + <kbd>Enter</kbd> للإرسال</span>
             </div>
 
-            <button type="button" id="btnSend" class="btn-send">
+            <button type="button" id="btnSend" class="btn-submit">
               <i class="fas fa-paper-plane"></i>
-              <span>اطرح السؤال</span>
+              <span>إرسال</span>
             </button>
           </div>
         </div>
@@ -187,160 +169,138 @@
     </main>
   </div>
 
-  <!-- نافذة اختيار وتخصيص مزود الذكاء الاصطناعي -->
-  <div class="modal-overlay" id="providerModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 class="modal-title">
-          <i class="fas fa-sliders" style="color: var(--primary);"></i>
-          <span>إعدادات مزود الذكاء الاصطناعي</span>
-        </h3>
-        <button type="button" class="btn-icon modal-close">
+  <!-- نافذة منظومة كود التطور والمطور -->
+  <div class="dialog-overlay" id="ecosystemModal">
+    <div class="dialog-panel" style="max-width: 780px;">
+      <div class="dialog-header">
+        <h3 class="dialog-title">منظومة كود التطور والمشاريع الرسمية</h3>
+        <button type="button" class="btn-icon-square modal-close">
           <i class="fas fa-times"></i>
         </button>
       </div>
+      <div class="dialog-body">
+        <!-- تعريف المهندس محمد أبو خشريف -->
+        <div class="dev-profile-box" id="devProfileContainer">
+          <!-- برمجياً من src/data/ecosystem.js -->
+        </div>
 
-      <div class="modal-body">
-        <p style="font-size: 0.88rem; color: var(--text-secondary);">
-          اختر الطريقة التي تفضلها لتوليد الإجابات. جميع الخيارات تعمل دون أن تقدم لنا أي مفتاح API!
+        <h4 style="font-size: 0.95rem; color: var(--text-primary); margin-top: 0.5rem;">مشاريع المنظومة المعتمدة:</h4>
+        <div class="ecosystem-grid" id="ecosystemGridContainer">
+          <!-- كروت المشاريع تظهر هنا -->
+        </div>
+      </div>
+      <div class="dialog-footer">
+        <button type="button" class="btn-primary-action modal-close">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- نافذة إعدادات مزود الذكاء الاصطناعي -->
+  <div class="dialog-overlay" id="providerModal">
+    <div class="dialog-panel">
+      <div class="dialog-header">
+        <h3 class="dialog-title">إعدادات تشغيل الذكاء الاصطناعي</h3>
+        <button type="button" class="btn-icon-square modal-close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div class="dialog-body">
+        <p style="font-size: 0.85rem; color: var(--text-secondary);">
+          اختر آلية المعالجة المناسبة. جميع الخيارات تعمل دون أن تقدم لنا أي مفتاح API سري.
         </p>
 
-        <!-- خيار 1: سحابي مجاني بدون مفتاح -->
-        <div class="provider-option-card selected" data-provider="puter">
-          <div class="provider-option-header">
-            <span class="provider-option-name">
-              <i class="fas fa-cloud" style="color: var(--primary);"></i>
-              <span>سحابي مجاني فوري (Puter.js)</span>
-            </span>
-            <span class="badge-tag green">الأسرع والموصى به</span>
+        <!-- خيار 1: سحابي مجاني حقيقي -->
+        <div class="curated-item-card" data-provider="cloud" style="cursor: pointer; border-right: 3px solid var(--primary);">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="color: var(--text-primary);">سحابي مجاني فوري (موصى به)</h4>
+            <span class="ecosystem-badge">جاهز ويعمل 100%</span>
           </div>
-          <p style="font-size: 0.8rem; color: var(--text-muted);">
-            يعمل فورياً على كافة الأجهزة والهواتف دون استهلاك لمعالج الرسوميات وبدون تحميل ملفات ضخمة.
+          <p>
+            توليد مباشر وتدفق حي عبر واجهة Pollinations AI المجانية. يعمل على كافة المتصفحات والهواتف دون استهلاك الذاكرة وبدون مفتاح.
           </p>
+        </div>
 
-          <div class="provider-sub-options" id="subOptions_puter" style="margin-top: 0.5rem;">
-            <label style="font-size: 0.78rem; color: var(--text-secondary);">اختر الموديل:</label>
-            <select id="selectPuterModel" class="lang-select" style="width: 100%; margin-top: 0.25rem;">
-              <option value="gpt-4o-mini">GPT-4o mini (سريع جداً وممتاز للأكواد)</option>
-              <option value="claude-3-5-sonnet">Claude 3.5 Sonnet (دقة استثنائية في التحليل المعماري)</option>
-              <option value="deepseek-chat">DeepSeek V3 (ذكاء خوارزمي عميق)</option>
+        <!-- خيار 2: محلي في المتصفح -->
+        <div class="curated-item-card" data-provider="webllm" style="cursor: pointer;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="color: var(--text-primary);">محلي داخل المتصفح (WebGPU WebLLM)</h4>
+            <span class="ecosystem-badge" style="background: rgba(16, 185, 129, 0.1); color: var(--success);">خصوصية تامة</span>
+          </div>
+          <p>
+            تشغيل مباشر على كرت الشاشة (GPU). يتطلب متصفحاً يدعم WebGPU وسعة ذاكرة كافية لتنزيل الأوزان.
+          </p>
+          <div id="subOptions_webllm" style="margin-top: 0.5rem; display: none;">
+            <select id="selectWebgpuModel" class="select-control" style="width: 100%;">
+              <option value="SmolLM2-360M-Instruct-q4f16_1-MLC">SmolLM2 360M (~240 MB) - خفيف وسريع</option>
+              <option value="Llama-3.2-1B-Instruct-q4f16_1-MLC">Llama 3.2 1B (~850 MB) - متوازن</option>
+              <option value="Qwen2.5-Coder-1.5B-Instruct-q4f16_1-MLC">Qwen 2.5 Coder 1.5B (~1.1 GB) - متخصص بالأكواد</option>
             </select>
           </div>
         </div>
 
-        <!-- خيار 2: نموذج يعمل داخل المتصفح بالكامل -->
-        <div class="provider-option-card" data-provider="webllm">
-          <div class="provider-option-header">
-            <span class="provider-option-name">
-              <i class="fas fa-laptop-code" style="color: var(--accent-purple);"></i>
-              <span>نموذج محلي داخل المتصفح (WebLLM)</span>
-            </span>
-            <span class="badge-tag purple">خصوصية 100% • بدون إنترنت</span>
+        <!-- خيار 3: BYOK اختياري -->
+        <div class="curated-item-card" data-provider="custom" style="cursor: pointer;">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h4 style="color: var(--text-primary);">مفتاح خاص اختياري (BYOK)</h4>
+            <span class="ecosystem-badge" style="background: rgba(245, 158, 11, 0.1); color: var(--warning);">للمطورين</span>
           </div>
-          <p style="font-size: 0.8rem; color: var(--text-muted);">
-            يعمل مباشرة على كرت الشاشة (WebGPU) في متصفحك. لا ترسل أكوادك لأي خادم إطلاقاً ويعمل حتى بدون إنترنت بعد التحميل الأول.
-          </p>
-
-          <div class="provider-sub-options" id="subOptions_webllm" style="margin-top: 0.5rem; display: none;">
-            <label style="font-size: 0.78rem; color: var(--text-secondary);">اختر النموذج المحلي:</label>
-            <select id="selectWebgpuModel" class="lang-select" style="width: 100%; margin-top: 0.25rem;">
-              <option value="SmolLM2-360M-Instruct-q4f16_1-MLC">SmolLM2 360M (~240 MB) - فائق الخفة والسرعة</option>
-              <option value="Llama-3.2-1B-Instruct-q4f16_1-MLC">Llama 3.2 1B (~850 MB) - متوازن وشامل</option>
-              <option value="Qwen2.5-Coder-1.5B-Instruct-q4f16_1-MLC">Qwen 2.5 Coder 1.5B (~1.1 GB) - متخصص بالبرمجة</option>
-            </select>
-            <small style="display: block; font-size: 0.72rem; color: var(--accent-amber); margin-top: 4px;">
-              * تنبيه: يتطلب متصفحاً يدعم WebGPU وسعة ذاكرة كافية. التحميل الأول يستغرق وقتاً حسب سرعة الإنترنت.
-            </small>
-          </div>
-        </div>
-
-        <!-- خيار 3: إحضار مفتاحك الخاص (اختياري تماماً) -->
-        <div class="provider-option-card" data-provider="custom">
-          <div class="provider-option-header">
-            <span class="provider-option-name">
-              <i class="fas fa-key" style="color: var(--accent-amber);"></i>
-              <span>مفتاحك الخاص (BYOK - اختياري)</span>
-            </span>
-            <span class="badge-tag">للمطورين المتقدمين</span>
-          </div>
-          <p style="font-size: 0.8rem; color: var(--text-muted);">
-            إذا كان لديك مفتاح خاص من OpenAI أو Groq أو خادم Ollama محلي وتريد استخدامه. يحفظ فقط داخل متصفحك.
-          </p>
-
-          <div class="provider-sub-options" id="subOptions_custom" style="margin-top: 0.5rem; display: none;">
-            <input type="password" id="customApiKey" class="sidebar-search-input" placeholder="sk-..." style="margin-bottom: 0.4rem;">
-            <input type="text" id="customEndpoint" class="sidebar-search-input" placeholder="https://api.openai.com/v1" value="https://api.openai.com/v1" style="margin-bottom: 0.4rem;">
-            <input type="text" id="customModel" class="sidebar-search-input" placeholder="اسم النموذج (مثل gpt-4o-mini)" value="gpt-4o-mini">
+          <p>إذا رغبت باستخدام مفتاحك الشخصي (OpenAI, Groq, Ollama). يحفظ داخل متصفحك فقط.</p>
+          <div id="subOptions_custom" style="margin-top: 0.5rem; display: none;">
+            <input type="password" id="customApiKey" class="search-field" placeholder="sk-..." style="margin-bottom: 0.35rem;">
+            <input type="text" id="customEndpoint" class="search-field" value="https://api.openai.com/v1" style="margin-bottom: 0.35rem;">
+            <input type="text" id="customModel" class="search-field" value="gpt-4o-mini">
           </div>
         </div>
       </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn-primary" id="btnSaveProvider">حفظ التغييرات</button>
+      <div class="dialog-footer">
+        <button type="button" class="btn-primary-action" id="btnSaveProvider">تأكيد التغيير</button>
       </div>
     </div>
   </div>
 
-  <!-- نافذة فحص وتوافق العتاد WebGPU -->
-  <div class="modal-overlay" id="hwModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 class="modal-title">
-          <i class="fas fa-microchip" style="color: var(--primary);"></i>
-          <span>فحص توافق كرت الشاشة و WebGPU</span>
-        </h3>
-        <button type="button" class="btn-icon modal-close">
+  <!-- نافذة فحص العتاد -->
+  <div class="dialog-overlay" id="hwModal">
+    <div class="dialog-panel">
+      <div class="dialog-header">
+        <h3 class="dialog-title">فحص عتاد WebGPU لتشغيل النماذج محلياً</h3>
+        <button type="button" class="btn-icon-square modal-close">
           <i class="fas fa-times"></i>
         </button>
       </div>
-      <div class="modal-body" id="hwInfoBody">
-        <!-- معلومات العتاد تظهر هنا -->
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-primary modal-close">إغلاق</button>
+      <div class="dialog-body" id="hwInfoBody"></div>
+      <div class="dialog-footer">
+        <button type="button" class="btn-primary-action modal-close">إغلاق</button>
       </div>
     </div>
   </div>
 
-  <!-- نافذة حول المنصة وسياسة الخصوصية -->
-  <div class="modal-overlay" id="aboutModal">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3 class="modal-title">
-          <i class="fas fa-shield-halved" style="color: var(--accent-emerald);"></i>
-          <span>عن منصة CodeQ والخصوصية</span>
-        </h3>
-        <button type="button" class="btn-icon modal-close">
+  <!-- نافذة حول المنصة -->
+  <div class="dialog-overlay" id="aboutModal">
+    <div class="dialog-panel">
+      <div class="dialog-header">
+        <h3 class="dialog-title">حول منصة CodeQ</h3>
+        <button type="button" class="btn-icon-square modal-close">
           <i class="fas fa-times"></i>
         </button>
       </div>
-      <div class="modal-body">
-        <h4 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.4rem;">ما هي منصة CodeQ؟</h4>
-        <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
-          منصة عربية مفتوحة المصدر تم بناؤها بالكامل لمساعدة المبرمجين والطلاب على طرح استفساراتهم البرمجية، تصحيح الأخطاء، وفهم المفاهيم المعقدة، باستخدام أحدث تقنيات الذكاء الاصطناعي دون أي تكلفة ودون الحاجة لتزويدنا بأي مفتاح API.
+      <div class="dialog-body">
+        <p style="font-size: 0.9rem; line-height: 1.7; color: var(--text-secondary);">
+          <strong>CodeQ</strong> هي منصة عربية برمجية تابعة لـ <strong>منظومة كود التطور</strong> ومطورة بواسطة <strong>المهندس محمد أبو خشريف</strong>، مخصصة للمطورين والطلاب للحصول على إجابات تقنية دقيقة وشروحات للأكواد البرمجية، بالاعتماد على نماذج لغوية حقيقية دون اشتراكات ودون الحاجة لتزويدنا بأي مفاتيح API.
         </p>
-
-        <h4 style="font-size: 1.05rem; color: var(--text-primary); margin-bottom: 0.4rem;">معمارية الخصوصية والأمان (Local-First):</h4>
-        <ul style="font-size: 0.88rem; color: var(--text-secondary); padding-right: 1.25rem; margin-bottom: 1rem; line-height: 1.8;">
-          <li><strong>لا توجد قواعد بيانات خارجية تحتفظ بأسئلتك:</strong> كافة محادثاتك وسجل الأسئلة والمفضلة تُخزن محلياً داخل متصفحك عبر تقنية <code>IndexedDB</code>.</li>
-          <li><strong>نماذج الذكاء الاصطناعي في المتصفح:</strong> عند تفعيل خيار <code>WebLLM</code>، يتم تنزيل النموذج إلى ذاكرة المتصفح ويتم التفكير ومعالجة الأكواد 100% داخل جهازك دون إرسال أي نص إلى أي سيرفر على الإطلاق.</li>
-          <li><strong>صفر بيانات اعتماد مسربة:</strong> لا نطلب ولا نخزن كلمات مرور ولا حسابات صورية.</li>
-          <li><strong>تصدير واستيراد مرن:</strong> يمكنك في أي وقت تصدير كافة محادثاتك بنقرة واحدة كملف JSON أو مسحها نهائياً.</li>
-        </ul>
-
-        <div style="background: var(--bg-surface); padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid var(--border-subtle); font-size: 0.8rem; color: var(--text-muted);">
-          مستودع المشروع على GitHub: <a href="https://github.com/mokashreef/codeq" target="_blank" rel="noopener noreferrer">github.com/mokashreef/codeq</a>
+        <div style="background: var(--bg-input); padding: 0.85rem; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); font-size: 0.82rem; color: var(--text-muted); line-height: 1.6;">
+          • الخصوصية: تحفظ المحادثات محلياً في متصفحك عبر <code>IndexedDB</code>.<br>
+          • الشفافية: يتم توضيح مصدر المعالجة في كل إجابة بدقة (سحابي أو محلي).<br>
+          • الكود المصدري: متاح كاملاً على <a href="https://github.com/mokashreef/codeq" target="_blank" rel="noopener noreferrer">GitHub</a>.
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn-primary modal-close">فهمت ذلك</button>
+      <div class="dialog-footer">
+        <button type="button" class="btn-primary-action modal-close">إغلاق</button>
       </div>
     </div>
   </div>
 
-  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true"></div>
+  <div id="toast-container" class="toast-stack" aria-live="polite"></div>
 
-  <!-- Main JavaScript Entry Point -->
   <script type="module" src="/src/main.js"></script>
 </body>
 
