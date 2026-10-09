@@ -6,13 +6,13 @@ on:
       - main
   workflow_dispatch:
 
-# Permissions required to deploy to GitHub Pages
+# Permissions required to deploy to GitHub Pages and push to gh-pages branch
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# Allow only one concurrent deployment
 concurrency:
   group: 'pages'
   cancel-in-progress: false
@@ -37,9 +37,14 @@ jobs:
         run: npm run test
 
       - name: Build production bundle
-        env:
-          BASE_PATH: /codeq/
         run: npm run build
+
+      - name: Deploy to gh-pages branch (Static Branch Fallback)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          keep_files: false
 
       - name: Upload build artifact
         uses: actions/upload-pages-artifact@v3

@@ -2,8 +2,8 @@ import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  // Base path for GitHub Pages repository deployment
-  base: process.env.BASE_PATH || '/codeq/',
+  // Use relative base path so assets load flawlessly under /codeq/ or any subpath
+  base: './',
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
