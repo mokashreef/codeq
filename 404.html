@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeQ - إعادة التوجيه</title>
+    <script>
+        // GitHub Pages SPA redirect
+        const path = window.location.pathname;
+        const search = window.location.search;
+        const hash = window.location.hash;
+        
+        // Ensure redirect to repository root /codeq/
+        const repoName = '/codeq';
+        if (path.startsWith(repoName)) {
+            const redirectPath = path.substring(repoName.length);
+            sessionStorage.setItem('codeq_redirect', redirectPath + search + hash);
+            window.location.replace(repoName + '/');
+        } else {
+            window.location.replace('/codeq/');
+        }
+    </script>
+</head>
+<body style="font-family: sans-serif; text-align: center; padding: 50px; direction: rtl;">
+    <h2>جاري إعادة التوجيه إلى منصة CodeQ...</h2>
+    <p>إذا لم يتم نقلك تلقائياً، <a href="/codeq/">انقر هنا للعودة إلى الصفحة الرئيسية</a>.</p>
+</body>
+</html>
