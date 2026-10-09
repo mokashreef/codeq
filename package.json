@@ -1,0 +1,22 @@
+{
+  "name": "codeq",
+  "version": "2.0.0",
+  "private": true,
+  "description": "CodeQ - منصة عربية احترافية للأسئلة البرمجية والذكاء الاصطناعي بدون مفاتيح API",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@mlc-ai/web-llm": "^0.2.85",
+    "highlight.js": "^11.11.1",
+    "marked": "^15.0.7"
+  },
+  "devDependencies": {
+    "vite": "^6.2.0",
+    "vitest": "^3.0.7"
+  }
+}
