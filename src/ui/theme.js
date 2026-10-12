@@ -1,11 +1,7 @@
-/**
- * Theme Manager for Light / Dark Mode
- */
-
 export class ThemeManager {
   constructor() {
     this.storageKey = 'codeq_theme_preference';
-    this.currentTheme = 'dark'; // Default to modern sleek dark mode
+    this.currentTheme = 'dark';
   }
 
   init() {
@@ -20,7 +16,6 @@ export class ThemeManager {
 
     this.applyTheme(this.currentTheme);
 
-    // Listen for OS system theme changes
     if (window.matchMedia) {
       window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
         if (!localStorage.getItem(this.storageKey)) {
